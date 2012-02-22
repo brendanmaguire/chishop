@@ -10,7 +10,7 @@
 {% block content %}
 {% with package.latest as release %}
 {% if release %}
-{% include "djangopypi/release_detail_content.html" %}
+{% include "djangopypi/package_detail_content.html" %}
 {% else %}
 <div>No releases yet :(</div>
 {% endif %}

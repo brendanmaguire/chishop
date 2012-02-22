@@ -1,0 +1,58 @@
+<div style="font-style: italic;">
+{{ release.summary }}
+</div>
+
+<div>
+{% load safemarkup %}
+{{ release.description|saferst }}
+</div>
+
+{% if release.distributions.count %}
+<p>
+    <b>Versions</b><br>
+    {% for r in release.package.releases.all %}
+    <a href="{{ request.get_full_path}}{{ r.version }}">{{ r.version }}</a><br>
+    {% endfor %}
+</p>
+<div>
+<b>Downloads</b>
+<table>
+	<thead>
+		<th>Filename</th><th>Type</th><th>Py Version</th><th>Uploaded On</th><th>Size</th>
+	</thead>
+	<tbody>
+	    {% for r in release.package.releases.all %}
+	    {% for dist in r.distributions.all %}
+	    <tr>
+	        <td><a href="{{ dist.get_absolute_url }}">{{ dist.filename }}</a></td>
+	        <td>{{ dist.display_filetype }}</td>
+	        <td>{{ dist.pyversion }}</td>
+	        <td>{{ dist.created }}</td>
+	        <td>{{ dist.content.size|filesizeformat }}</td>
+	    </tr>
+	    {% endfor %}
+	    {% endfor %}
+	</tbody>
+</table>
+</div>
+{% endif %}
+<div>
+<ul class="plainlist">
+<li><strong>License: </strong>{{ release.package_info.license }}</li>
+<li><strong>Author: </strong><a href="mailto:{{ release.package_info.author_email }}">{{ release.package_info.author }}</a></li>
+
+<li><strong>Home Page: </strong><a href="{{ release.package_info.home_page }}">{{ release.package_info.home_page }}</a></li>
+{% if release.package_info.download_url %}
+<li><strong>Download URL: </strong><a href="{{ release.package_info.download_url }}">{{ release.package_info.download_url }}</a></li>
+{% endif %}
+{% if release.classifiers %}
+<li><strong>Classifiers: </strong>
+    <ul class="plainlist">
+    {% for classifier in release.classifiers %}
+        <li>{{ classifier }}</li>
+    {% endfor %}
+    </ul>
+</li>
+{% endif %}
+</ul>
+</div>
